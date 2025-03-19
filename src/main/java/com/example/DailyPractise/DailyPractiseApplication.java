@@ -14,5 +14,10 @@ public class DailyPractiseApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		System.out.println("welcome dinesh hanumanthu");
+		System.out.println("Your Spring Security configuration has two conflicting user details services:\n" +
+				"\n" +
+				"In-Memory Authentication (myInMemoryUserDetailService) in WebSecConfig, which defines hardcoded users (dinesh and admin).\n" +
+				"Database Authentication (UserService implementing UserDetailsService), which fetches users from the UserRepository.");
+		System.out.println("so i have commented out @service of UserService class to use in memory authetication");
 	}
 }
