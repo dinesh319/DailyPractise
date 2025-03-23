@@ -14,22 +14,22 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
 
-    private ApiResponse<ApiError> buildResponseWithError(ApiError apiError) {
-        return new ApiResponse<>(apiError);
+    private ResponseEntity<ApiResponse<?>> buildResponseEntityWithError(ApiError apiError) {
+        return new ResponseEntity<>(new ApiResponse<>(apiError) , apiError.getStatus());
     }
 
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ApiResponse<ApiError> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException){
+    public ResponseEntity<ApiResponse<?>> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException){
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.NOT_FOUND)
                 .message(resourceNotFoundException.getMessage())
                 .build();
-        return buildResponseWithError(apiError);
+              return  buildResponseEntityWithError(apiError);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiResponse<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException methodArgumentNotValidException){
+    public ResponseEntity<ApiResponse<?>> handleMethodArgumentNotValidException(MethodArgumentNotValidException methodArgumentNotValidException){
 
         List<String> errors  = methodArgumentNotValidException.
                 getBindingResult().getAllErrors().stream().map(err -> err.getDefaultMessage()).toList();
@@ -38,17 +38,17 @@ public class GlobalExceptionHandler {
                 .message("validation failed").subMessages(errors).status(HttpStatus.BAD_REQUEST)
                 .build();
 
-        return buildResponseWithError(apiError);
+               return  buildResponseEntityWithError(apiError);
     }
 
     @ExceptionHandler(Exception.class)
-    public ApiResponse<ApiError> handleException(Exception exception){
+    public ResponseEntity<ApiResponse<?>> handleException(Exception exception){
 
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR).message(exception.getMessage())
                 .build();
 
-        return buildResponseWithError(apiError);
+               return  buildResponseEntityWithError(apiError);
 
     }
 
