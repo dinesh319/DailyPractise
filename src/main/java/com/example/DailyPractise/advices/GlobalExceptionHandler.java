@@ -11,37 +11,38 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private ApiResponse<ApiError> buildApiResponseWithError(ApiError apiError) {
-        return new ApiResponse<>(apiError);
+    private ResponseEntity<ApiResponse<?>> buildResponseEntityWithError(ApiError apiError) {
+        return new ResponseEntity<>(new ApiResponse<>(apiError) , apiError.getStatus());
     }
 
+
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ApiResponse<ApiError> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException){
+    public ResponseEntity<ApiResponse<?>>  handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException){
         ApiError apiError = ApiError.builder()
                 .message(resourceNotFoundException.getMessage()).status(HttpStatus.NOT_FOUND)
                 .build();
 
-        return buildApiResponseWithError(apiError);
+               return  buildResponseEntityWithError(apiError);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiResponse<ApiError> handleMethodArgumentsNotValid(MethodArgumentNotValidException methodArgumentNotValidException){
+    public ResponseEntity<ApiResponse<?>>  handleMethodArgumentsNotValid(MethodArgumentNotValidException methodArgumentNotValidException){
         List<String> errors = methodArgumentNotValidException.
                 getBindingResult().getAllErrors().stream().map(err -> err.getDefaultMessage()).toList();
 
         ApiError apiError = ApiError.builder()
                 .message("validation failed").subMessages(errors).status(HttpStatus.BAD_REQUEST).build();
 
-       return buildApiResponseWithError(apiError);
+              return  buildResponseEntityWithError(apiError);
     }
 
 
     @ExceptionHandler(Exception.class)
-    public ApiResponse<ApiError> handleException(Exception exception){
+    public ResponseEntity<ApiResponse<?>>  handleException(Exception exception){
         ApiError apiError = ApiError.builder()
                 .message(exception.getMessage()).status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 
-        return buildApiResponseWithError(apiError);
+               return  buildResponseEntityWithError(apiError);
     }
 
 
