@@ -1,0 +1,29 @@
+package com.example.DailyPractise.dtos;
+
+import com.example.DailyPractise.entities.enums.Permissions;
+import com.example.DailyPractise.entities.enums.Roles;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Set;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class SignUpDto {
+
+    @NotBlank(message = "email field is required field")
+    private String email;
+
+    @NotBlank(message = "password field is required field")
+    private String password;
+
+
+    private Set<Roles> roles;
+
+    private Set<Permissions> permissions;
+}
