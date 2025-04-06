@@ -11,6 +11,8 @@ public class DailyPractiseApplication implements CommandLineRunner {
 		SpringApplication.run(DailyPractiseApplication.class, args);
 	}
 
+
+
 	@Override
 	public void run(String... args) throws Exception {
 		System.out.println("welcome dinesh hanumanthu");
